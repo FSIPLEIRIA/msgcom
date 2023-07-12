@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="msgcom" exec="main">
+        <param from="/home/fsipleiria_ad/ros2_ws/src/msgcom/config/demo_params.yaml"/> 
+    </node>
+</launch>
