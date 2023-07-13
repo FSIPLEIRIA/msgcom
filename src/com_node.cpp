@@ -3,7 +3,7 @@
 Comnode::Comnode() : Node(NODE_NOME){
     this->declare_parameter(PARAMS_TOPIC_ACKERMANN,"/");
     this->get_parameter(PARAMS_TOPIC_ACKERMANN,m_ackermann_topic);
-    auto m_ackermann_topic2 = this->create_subscription<ackermann_msgs::msg::AckermannDrive>(
+    m_ackermann_subscriber = this->create_subscription<ackermann_msgs::msg::AckermannDrive>(
         m_ackermann_topic, 10, std::bind(&Comnode::waypoint_callback, this, std::placeholders::_1));
 }
 std::string Comnode::g_AckermannTopic(){

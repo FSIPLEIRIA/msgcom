@@ -3,7 +3,7 @@
 
 #define NODE_NOME "msgcom"
 #define PARAMS_TOPIC_ACKERMANN "ackermann_topic"
-#define SERIAL_FILE "/home/fsipleiria_ad/serialcom"
+#define SERIAL_FILE "/home/fcj/serialcom"
 #define FILENOTFOUND 1
 
 #include <stdio.h>
@@ -13,6 +13,7 @@
 #include <fstream>
 #include <rclcpp/node.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <rclcpp/executors.hpp>
 #include <ackermann_msgs/msg/ackermann_drive.hpp>
 
 class Comnode : public rclcpp::Node{
@@ -22,7 +23,7 @@ class Comnode : public rclcpp::Node{
         
         std::string g_NodeName();
         std::string g_AckermannTopic();
-
+        rclcpp::Subscription<ackermann_msgs::msg::AckermannDrive> m_ackermann_subscriber;
 
     protected:
         std::string m_ackermann_topic;
