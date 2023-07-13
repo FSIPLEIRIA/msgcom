@@ -19,9 +19,8 @@ void Comnode::waypoint_callback(ackermann_msgs::msg::AckermannDrive::SharedPtr m
     ackermann_msgs::msg::AckermannDrive local_msg = *msg;
     angle = local_msg.steering_angle;
     velocity = local_msg.speed;
-    angle = 45.54;
-    velocity = 90.54;
+    
     //TODO Falar com o guilherme sobre quem trata dos "0's" 
-    file << printf("S-%3.4fR-%3.4f", velocity, angle);
+    file << "S-" << angle << "R-" << velocity << std::endl;
     file.close();
 }
