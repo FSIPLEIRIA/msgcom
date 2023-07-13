@@ -23,10 +23,15 @@ class Comnode : public rclcpp::Node{
         
         std::string g_NodeName();
         std::string g_AckermannTopic();
-        rclcpp::Subscription<ackermann_msgs::msg::AckermannDrive> m_ackermann_subscriber;
+    
 
     protected:
         std::string m_ackermann_topic;
+
         void waypoint_callback(const ackermann_msgs::msg::AckermannDrive::SharedPtr msg);
+
+    private:
+        rclcpp::Subscription<ackermann_msgs::msg::AckermannDrive>::SharedPtr m_ackermann_subscriber;
+
 };
 #endif
