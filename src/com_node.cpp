@@ -1,5 +1,6 @@
 #include "com_node.h"
 #include <cstdio>
+#include <rclcpp/logging.hpp>
 #include <rclcpp/parameter_value.hpp>
 #include <string>
 #include <termios.h>
@@ -21,7 +22,7 @@ Comnode::Comnode() : Node(NODE_NOME){
         m_ackermann_topic, 10, std::bind(&Comnode::waypoint_callback, this, std::placeholders::_1));
 	
 	// );
-    file_descriptor = open(m_serial_path.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
+    file_descriptor = open(m_serial_path.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 	int flag_a=0;
 	switch(m_serial_baudrate){
 		case 115200:
@@ -42,11 +43,15 @@ Comnode::Comnode() : Node(NODE_NOME){
 			break;
 	}
 
-	tty.c_cflag = flag_a | CRTSCTS | CS8 | CLOCAL | CREAD;
-	tty.c_iflag = IGNPAR | ICRNL;
-	tty.c_oflag = 0;
-	tty.c_lflag = ICANON;
+	tcgetattr(file_descriptor, &tty);
+	cfsetispeed(&tty, flag_a);
+    cfsetospeed(&tty, flag_a);
 
+	tty.c_cflag |= (CLOCAL | CREAD);
+    tty.c_cflag &= ~PARENB;  // No parity
+    tty.c_cflag &= ~CSTOPB;  // 1 stop bit
+    tty.c_cflag &= ~CSIZE;
+    tty.c_cflag |= CS8;
 
 	tcsetattr(file_descriptor, TCSANOW, &tty);
 
@@ -85,8 +90,8 @@ void Comnode::waypoint_callback(ackermann_msgs::msg::AckermannDrive::SharedPtr m
     ackermann_msgs::msg::AckermannDrive local_msg = *msg;
     angle = local_msg.steering_angle;
     velocity = local_msg.speed;
-	std::string message = std::to_string(angle) + "d" + std::to_string(velocity);
-	
+	std::string message = std::to_string((int)angle) + "d" + std::to_string((int)velocity)+"\n";
+	RCLCPP_INFO(this->get_logger(), "Sending message: %s", message.c_str()); 
 
 	auto k = write (file_descriptor, message.c_str(), message.length());
 	if(k == -1 || k < (ssize_t)message.length()){
