@@ -4,12 +4,20 @@
 #define NODE_NOME "msgcom"
 #define PARAMS_TOPIC_ACKERMANN "ackermann_topic"  
 #define SERIAL_FILE "uart_serialterminal"
+#define SERIAL_BAUDRATE "serial_baudrate"
 #define FILENOTFOUND 1
+#define _POSIX_SOURCE 1
 
 #include <stdio.h>
-#include <cstdio>
-#include <string>
 #include <iostream>
+#include <termios.h> 
+#include <stdio.h> 
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <sys/signal.h> 
+
+#include <termios.h> 
+#include <string>
 #include <fstream>
 #include <rclcpp/node.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -24,6 +32,8 @@ class Comnode : public rclcpp::Node{
         
         std::string g_NodeName();
         std::string g_AckermannTopic();
+		int g_SerialBaudRate(); 
+		void s_SerialBaudRate(int baudrate);
 		//void update_FileDescriptor(); 
 		virtual ~Comnode();
 
@@ -32,7 +42,8 @@ class Comnode : public rclcpp::Node{
     protected:
         std::string m_ackermann_topic;
 		std::string m_serial_path;
-		std::ofstream file_descriptor;
+		int m_serial_baudrate;
+		int file_descriptor;
         void waypoint_callback(const ackermann_msgs::msg::AckermannDrive::SharedPtr msg);
 
     private:
