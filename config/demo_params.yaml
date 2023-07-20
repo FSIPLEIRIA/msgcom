@@ -1,6 +1,7 @@
 /msgcom:
   ros__parameters:
-    uart_serialterminal: /tmp/msgcom_serial
+    uart_serialterminal: /dev/ttyUSB0
+    serial_baudrate: 115200
     ackermann_topic: /control/drive
     qos_overrides:
       /parameter_events:
