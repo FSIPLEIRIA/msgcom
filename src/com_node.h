@@ -36,7 +36,7 @@ class Comnode : public rclcpp::Node{
 		void s_SerialBaudRate(int baudrate);
 		//void update_FileDescriptor(); 
 		virtual ~Comnode();
-
+        double velocity_rpm(double velocity);
     
 
     protected:
@@ -47,7 +47,6 @@ class Comnode : public rclcpp::Node{
         void waypoint_callback(const ackermann_msgs::msg::AckermannDrive::SharedPtr msg);
 
     private:
-        velocity_rpm(double velocity);
         rclcpp::Subscription<ackermann_msgs::msg::AckermannDrive>::SharedPtr m_ackermann_subscriber;
 
 };

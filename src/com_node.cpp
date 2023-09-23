@@ -84,7 +84,7 @@ std::string Comnode::g_AckermannTopic(){
 std::string Comnode::g_NodeName(){
 	return NODE_NOME;
 }
-void Comnode::velocity_rpm(double velocity){
+double Comnode::velocity_rpm(double velocity){
 	return (velocity*M_PI_2*0.26)/(4*60);
 }
 
