@@ -96,7 +96,7 @@ void Comnode::waypoint_callback(ackermann_msgs::msg::AckermannDrive::SharedPtr m
     ackermann_msgs::msg::AckermannDrive local_msg = *msg;
     angle = local_msg.steering_angle;
     velocity = local_msg.speed;
-	std::string message = std::to_string(rad2Deg((int)angle)) + "d" + std::to_string(velocity_rpm((int)velocity))+"\n";
+	std::string message = std::to_string((int)velocity_rpm(velocity))+ "d" +std::to_string((int)rad2Deg(angle))+"\n";
 	RCLCPP_INFO(this->get_logger(), "Sending message: %s", message.c_str()); 
 
 	auto k = write (file_descriptor, message.c_str(), message.length());
