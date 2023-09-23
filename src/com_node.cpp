@@ -5,7 +5,10 @@
 #include <string>
 #include <termios.h>
 #include <unistd.h>
+#include <math.h>
 
+#define deg2Rad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
+#define rad2Deg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
 
 Comnode::Comnode() : Node(NODE_NOME){
     this->declare_parameter(PARAMS_TOPIC_ACKERMANN,"/");
@@ -81,6 +84,9 @@ std::string Comnode::g_AckermannTopic(){
 std::string Comnode::g_NodeName(){
 	return NODE_NOME;
 }
+void Comnode::velocity_rpm(double velocity){
+	return (velocity*M_PI_2*0.26)/(4*60);
+}
 
 void Comnode::waypoint_callback(ackermann_msgs::msg::AckermannDrive::SharedPtr msg){
     float angle;
@@ -90,7 +96,7 @@ void Comnode::waypoint_callback(ackermann_msgs::msg::AckermannDrive::SharedPtr m
     ackermann_msgs::msg::AckermannDrive local_msg = *msg;
     angle = local_msg.steering_angle;
     velocity = local_msg.speed;
-	std::string message = std::to_string((int)angle) + "d" + std::to_string((int)velocity)+"\n";
+	std::string message = std::to_string(rad2Deg((int)angle)) + "d" + std::to_string(velocity_rpm((int)velocity))+"\n";
 	RCLCPP_INFO(this->get_logger(), "Sending message: %s", message.c_str()); 
 
 	auto k = write (file_descriptor, message.c_str(), message.length());
