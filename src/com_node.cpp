@@ -9,6 +9,8 @@
 
 #define deg2Rad(angleInDegrees) ((angleInDegrees) * M_PI / 180.0)
 #define rad2Deg(angleInRadians) ((angleInRadians) * 180.0 / M_PI)
+#define TOTAL_RATIO 11.5
+#define WHEEL_RADIUS 0.055
 
 Comnode::Comnode() : Node(NODE_NOME){
     this->declare_parameter(PARAMS_TOPIC_ACKERMANN,"/");
@@ -85,7 +87,7 @@ std::string Comnode::g_NodeName(){
 	return NODE_NOME;
 }
 double Comnode::velocity_rpm(double velocity){
-	return (velocity*M_PI_2*0.26)/(4*60);
+	return (velocity*30*TOTAL_RATIO)/(M_PI*WHEEL_RADIUS);
 }
 
 void Comnode::waypoint_callback(ackermann_msgs::msg::AckermannDrive::SharedPtr msg){
